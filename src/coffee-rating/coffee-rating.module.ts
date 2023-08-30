@@ -7,8 +7,8 @@ import { DatabaseModule } from 'src/database/database.module';
   imports: [
     DatabaseModule.register({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
+      host: process.env.HOST,
+      port: +process.env.DATABASE_PORT,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
     }),
