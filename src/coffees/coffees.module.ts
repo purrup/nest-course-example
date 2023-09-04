@@ -1,4 +1,9 @@
-import { Injectable, Module } from '@nestjs/common';
+import {
+  Injectable,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +12,7 @@ import { Flavor } from './entities/flavor.entity';
 import { Event } from 'src/events/entities/event.entity';
 import { ConfigModule } from '@nestjs/config';
 import coffeesConfig from './coffees.config';
+import { LoggingMiddleware } from 'src/common/middleware/logging/logging.middleware';
 
 @Module({
   imports: [
@@ -17,4 +23,8 @@ import coffeesConfig from './coffees.config';
   providers: [CoffeesService],
   exports: [CoffeesService],
 })
-export class CoffeesModule {}
+export class CoffeesModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggingMiddleware).forRoutes('*');
+  }
+}
